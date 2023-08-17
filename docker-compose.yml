@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+
+  mongodb-Cont:
+
+    image: mongo:latest
+
+    container_name: mongoDB-Cont
+
+    env_file:
+      - .env
+
+    ports:
+      - 27017:27017
+
+    volumes:
+      - mongodb_data_cont:/data/db
+
+volumes:
+
+  mongodb_data_cont:
