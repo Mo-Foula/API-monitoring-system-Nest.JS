@@ -3,5 +3,5 @@ export abstract class InspectionLogsAbstract {
   _id?: any
   createdAt?: Date
   responseTime?: number
-  statusCode?: boolean
+  statusCode?: number
 }

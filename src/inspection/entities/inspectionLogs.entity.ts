@@ -14,7 +14,7 @@ export class InspectionLogs extends InspectionLogsAbstract {
   responseTime?: number
 
   // @Prop({ type: Boolean })
-  statusCode?: boolean
+  statusCode?: number
 }
 
 export const InspectionLogsSchema = SchemaFactory.createForClass(InspectionLogs)

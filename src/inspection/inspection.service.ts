@@ -8,7 +8,6 @@ import { CreateInspectionDto } from './dto/create-inspection.dto'
 import { UpdateInspectionDto } from './dto/update-inspection.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { InspectionAbstract } from './interfaces/inspection.entity.abstract'
-import { IRepository } from 'src/general_interfaces/IRepository.interface'
 import { UsersService } from 'src/auth/users/users.service'
 import { SchedulerService } from 'src/scheduler/scheduler.service'
 import { InspectionResult } from 'src/general_interfaces/response.interface'
@@ -34,6 +33,7 @@ export class InspectionService {
           $each: [
             { responseTime, statusCode, statusText, createdAt: new Date() },
           ],
+          $position: 0,
         },
       },
     }
@@ -90,7 +90,9 @@ export class InspectionService {
   }
 
   async findById(id: any) {
-    return this.inspectionRepo.findById(id)
+    return this.inspectionRepo.findOne({
+      _id: id,
+    })
   }
 
   async findOne() {

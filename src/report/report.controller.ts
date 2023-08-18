@@ -30,6 +30,11 @@ export class ReportController {
     return this.reportService.findOne(+id)
   }
 
+  @Get('/inspections/:id')
+  findOneByInspection(@Param('id') id: string) {
+    return this.reportService.findOneByInspection(id)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateReportDto: UpdateReportDto) {
     return this.reportService.update(+id, updateReportDto)

@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { ReportAbstract } from '../interfaces/report.entity.abstract'
 import { Schema as SchemaTypes } from 'mongoose'
 import { InspectionAbstract } from 'src/inspection/interfaces/inspection.entity.abstract'
+import { InspectionLogsAbstract } from 'src/inspection/interfaces/inspectionLogs.entity.abstract'
 
 @Schema({ collection: 'Reports' })
 export class Report extends ReportAbstract {
@@ -23,8 +24,10 @@ export class Report extends ReportAbstract {
   @Prop()
   responseTime: number
 
-  @Prop({ type: [{ type: SchemaTypes.Types.ObjectId, ref: 'Inspections' }] })
-  inspections: [InspectionAbstract]
+  @Prop({ type: { type: SchemaTypes.Types.ObjectId, ref: 'Inspections' } })
+  inspection: InspectionAbstract
+
+  history: InspectionLogsAbstract[]
 }
 
 export const ReportSchema = SchemaFactory.createForClass(Report)
