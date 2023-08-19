@@ -2,6 +2,7 @@
 
 This system allows you to monitor URLs, create reports about their availability and get notified whenever the system goes down.
 
+You can view the requirements the project was built for: [REQUIREMENTS](/REQUIREMENTS.md)
 ## Main Features
 
 ### Authorization System
