@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { CronJob } from 'cron'
+import { UserAbstract } from 'src/auth/users/entities/user.entity.abstract'
 import { InspectionResult } from 'src/general_interfaces/response.interface'
 import { InspectionAbstract } from 'src/inspection/interfaces/inspection.entity.abstract'
 import { RequestsClientService } from 'src/requests_client/requests_client.service'
@@ -41,7 +42,11 @@ export class SchedulerService {
 
   createJob(
     inspection: InspectionAbstract,
-    onCompleteUpdate: (inspectionResult: InspectionResult) => void,
+    onCompleteUpdate: (
+      inspectionResult: InspectionResult,
+      user: UserAbstract,
+    ) => void,
+    user: UserAbstract,
     start = false,
   ): CronJob {
     const cron = this.prepareCronString(inspection)
@@ -53,16 +58,26 @@ export class SchedulerService {
     const newJob = new CronJob(
       cron,
       async function () {
-        console.log('You will see this message every 1 minute')
-        const result = await makeRequest(inspection)
-        onCompleteUpdate(result)
+        const result: InspectionResult = await makeRequest(inspection)
+        onCompleteUpdate(result, user)
       }.bind(this),
       null,
       start,
     )
-    SchedulerService.jobs.set(inspection._id, newJob)
+    SchedulerService.jobs.set(inspection._id.toString(), newJob)
 
     return newJob
+  }
+
+  async getJobByInspectionId(inspectionId: any): Promise<CronJob> {
+    return await SchedulerService.jobs.get(inspectionId)
+  }
+
+  async removeJob(id: any) {
+    const job = await this.getJobByInspectionId(id)
+    this.stopJob(job)
+    SchedulerService.jobs.delete(id)
+    return job
   }
 
   getJobById(param: InspectionAbstract | string): CronJob {
@@ -79,11 +94,21 @@ export class SchedulerService {
     return SchedulerService.jobs.get(id)
   }
 
-  startJob(job: CronJob): void {
+  async startJob(job: CronJob): Promise<void> {
     job.start()
   }
 
-  stopJob(job: CronJob): void {
+  async startJobById(id: any): Promise<void> {
+    const job = await this.getJobByInspectionId(id)
+    job.start()
+  }
+
+  async stopJobById(id: any): Promise<void> {
+    const job = await this.getJobByInspectionId(id)
+    job.stop()
+  }
+
+  async stopJob(job: CronJob): Promise<void> {
     job.stop()
   }
 }

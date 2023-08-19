@@ -45,11 +45,11 @@ export class InspectionController {
     @Param('id') id: string,
     @Body() updateInspectionDto: UpdateInspectionDto,
   ) {
-    return this.inspectionService.update(+id, updateInspectionDto)
+    return this.inspectionService.update(id, updateInspectionDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.inspectionService.remove(+id)
+    return this.inspectionService.remove(id)
   }
 }

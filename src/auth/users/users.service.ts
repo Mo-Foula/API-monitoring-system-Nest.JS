@@ -3,11 +3,7 @@ import { UserAbstract } from './entities/user.entity.abstract'
 import { InjectModel } from '@nestjs/mongoose'
 import { IRepository } from 'src/general_interfaces/IRepository.interface'
 import { CreateUserDto } from './dto/create-user.dto'
-import { FilterQuery, Model } from 'mongoose'
-import { ClaimActions } from '../claims/constants'
-import { ClaimAbstract } from '../claims/entities/claim.entity.abstract'
-import { arrayToObject } from 'src/utils/array.to.object.utils'
-import { RoleAbstract } from '../roles/entities/role.entity.abstract'
+import { FilterQuery } from 'mongoose'
 
 @Injectable()
 export class UsersService {
@@ -33,7 +29,7 @@ export class UsersService {
     // return this.usersRepo.findAll({})
   }
 
-  async findOneById(id: number): Promise<UserAbstract | undefined> {
+  async findOneById(id: any): Promise<UserAbstract | undefined> {
     return this.usersRepo.findById(id)
   }
 

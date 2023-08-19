@@ -6,16 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common'
 import { ClaimsService } from './claims.service'
 import { CreateClaimDto } from './dto/create-claim.dto'
 import { UpdateClaimDto } from './dto/update-claim.dto'
+import { AuthGuard } from '../auth.guard'
+import { ClaimActions } from './constants'
 
 @Controller('claims')
 export class ClaimsController {
   constructor(private readonly claimsService: ClaimsService) {}
 
   @Post()
+  @UseGuards(AuthGuard('Claim', ClaimActions.create))
   create(@Body() createClaimDto: CreateClaimDto) {
     return this.claimsService.create(createClaimDto)
   }

@@ -15,10 +15,10 @@ export abstract class InspectionAbstract {
   threshold?: number // (defaults to 1 failure): The threshold of failed requests that will create an alert (optional).
   // authentication?: Authentication;
   httpHeaders?: Map<string, string>
-  assert?: number
+  assert?: any
   tags?: string[]
   ignoreSSL?: boolean
-  user?: UserAbstract
+  user?: any
   jobId?: any
   authentication?: { username: string; password: string }
   logs?: [InspectionLogsAbstract]

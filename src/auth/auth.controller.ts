@@ -19,7 +19,7 @@ export class AuthController {
     return this.authService.registerUser(signUpUserDto)
   }
 
-  @UseGuards(AuthGuard('signupAdmin', ClaimActions.create))
+  @UseGuards(AuthGuard('SignupAdmin', ClaimActions.create))
   @Post('/signupAdmin')
   registerAdmin(@Body() signUpUserDto: SignUpUserDto) {
     return this.authService.registerUser(signUpUserDto)

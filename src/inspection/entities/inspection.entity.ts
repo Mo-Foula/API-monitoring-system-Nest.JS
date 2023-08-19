@@ -1,13 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { InspectionAbstract } from '../interfaces/inspection.entity.abstract'
 import { Schema as SchemaTypes } from 'mongoose'
-import { UserAbstract } from 'src/auth/users/entities/user.entity.abstract'
 import { InspectionLogs } from './inspectionLogs.entity'
 
 @Schema({ collection: 'Inspections' })
 export class Inspection extends InspectionAbstract {
   @Prop({ type: SchemaTypes.Types.ObjectId, ref: 'Users' })
-  user?: UserAbstract
+  user?: SchemaTypes.Types.ObjectId
 
   @Prop()
   name: string

@@ -50,7 +50,7 @@ export function AuthGuard(
   @Injectable()
   class AuthGuardGetUser implements CanActivate {
     constructor(
-      private readonly authService: AuthService,
+      private authService: AuthService,
       private jwtService: JwtService,
     ) {}
 

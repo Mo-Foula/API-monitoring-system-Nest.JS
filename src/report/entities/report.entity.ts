@@ -24,6 +24,9 @@ export class Report extends ReportAbstract {
   @Prop()
   responseTime: number
 
+  @Prop()
+  statusCode: number
+
   @Prop({ type: { type: SchemaTypes.Types.ObjectId, ref: 'Inspections' } })
   inspection: InspectionAbstract
 

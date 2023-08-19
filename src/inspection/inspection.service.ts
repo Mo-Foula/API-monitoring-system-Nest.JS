@@ -12,6 +12,10 @@ import { UsersService } from 'src/auth/users/users.service'
 import { SchedulerService } from 'src/scheduler/scheduler.service'
 import { InspectionResult } from 'src/general_interfaces/response.interface'
 import { Model } from 'mongoose'
+import { AlertingService } from 'src/alerting/alerting.service'
+import { AlertData } from 'src/general_interfaces/alert.data.interface'
+import { ReportUtils } from 'src/report/report.utils'
+import { UserAbstract } from 'src/auth/users/entities/user.entity.abstract'
 
 @Injectable()
 export class InspectionService {
@@ -20,23 +24,36 @@ export class InspectionService {
     private inspectionRepo: Model<InspectionAbstract>,
     private userService: UsersService,
     private schedulerService: SchedulerService,
+    private alertingService: AlertingService,
   ) {}
+  static diKey = 'InspectionServiceDIKey'
 
-  async recordInspectionResult(inspectionResult: InspectionResult) {
+  async recordInspectionResult(
+    inspectionResult: InspectionResult,
+    user: UserAbstract,
+  ) {
     const { responseTime, statusCode, statusText, inspection } =
       inspectionResult
+
+    const newLog = {
+      responseTime,
+      statusCode,
+      statusText,
+      createdAt: new Date(),
+    }
 
     const inspectionLog: any = {
       $push: {
         // logs: { responseTime, statusCode, statusText, createdAt: new Date() },
         logs: {
-          $each: [
-            { responseTime, statusCode, statusText, createdAt: new Date() },
-          ],
+          $each: [newLog],
           $position: 0,
         },
       },
     }
+
+    if (!inspection.logs) inspection.logs = [newLog]
+    else inspection.logs.push(newLog)
 
     const updateResult = await this.inspectionRepo.findOneAndUpdate(
       {
@@ -45,7 +62,34 @@ export class InspectionService {
       },
       inspectionLog,
     )
+
+    const report = ReportUtils.createReportFromInspection(inspection)
+    if (
+      report.status !== 'Available' &&
+      ((inspection.threshold && report.outages >= inspection.threshold) ||
+        !inspection.threshold)
+    ) {
+      const alertData: AlertData = {
+        inspection,
+        user,
+        report,
+      }
+      this.alertingService.alertDownService(alertData)
+    }
     return updateResult
+  }
+
+  createJob(inspection: InspectionAbstract, user: UserAbstract) {
+    return this.schedulerService.createJob(
+      inspection,
+      this.recordInspectionResult.bind(this),
+      user,
+      true,
+    )
+  }
+
+  removeJob(id: any) {
+    return this.schedulerService.removeJob(id)
   }
 
   async create(createInspectionDto: CreateInspectionDto) {
@@ -55,7 +99,8 @@ export class InspectionService {
     }
     const newInspection: InspectionAbstract = {
       ...createInspectionDto,
-      user,
+      assert: createInspectionDto.assert.statusCode,
+      user: user._id,
     }
 
     const inspectionExists = await this.inspectionRepo.findOne({
@@ -77,11 +122,7 @@ export class InspectionService {
       throw new HttpException('', 300)
     }
 
-    this.schedulerService.createJob(
-      newInspection,
-      this.recordInspectionResult.bind(this),
-      true,
-    )
+    this.createJob(inspection, user)
     return inspection
   }
 
@@ -99,11 +140,23 @@ export class InspectionService {
     return this.inspectionRepo.findOne({})
   }
 
-  async update(id: number, updateInspectionDto: UpdateInspectionDto) {
-    return this.inspectionRepo.findByIdAndUpdate(id, updateInspectionDto)
+  async update(id: any, updateInspectionDto: UpdateInspectionDto) {
+    const user = await this.userService.findOneById(updateInspectionDto.userId)
+    if (!user) {
+      throw new BadRequestException('User not found')
+    }
+
+    const inspection = await this.inspectionRepo.findByIdAndUpdate(
+      id,
+      updateInspectionDto,
+    )
+    this.removeJob(inspection._id)
+    this.createJob(inspection, user)
+    return inspection
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} inspection`
+  remove(id: any) {
+    this.removeJob(id)
+    return this.inspectionRepo.findByIdAndRemove(id)
   }
 }

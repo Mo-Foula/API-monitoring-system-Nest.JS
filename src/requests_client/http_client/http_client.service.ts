@@ -14,18 +14,23 @@ export class HttpClientService implements IHttpClientService {
 
     const axiosRequest = Axios.create()
 
+    let response
     timer.start()
-    const response = await axiosRequest({
-      baseURL: url,
-      timeout,
-      headers,
-      // httpAgent:
-      // httpsAgent: agent,
-      auth: authentication && {
-        username: authentication.username,
-        password: authentication.password,
-      },
-    })
+    try {
+      response = await axiosRequest({
+        baseURL: url,
+        timeout,
+        headers,
+        // httpAgent:
+        // httpsAgent: agent,
+        auth: authentication && {
+          username: authentication.username,
+          password: authentication.password,
+        },
+      })
+    } catch (error: any) {
+      response = error.response
+    }
     timer.stop()
 
     const responseTime = timer.getDuration() || -1

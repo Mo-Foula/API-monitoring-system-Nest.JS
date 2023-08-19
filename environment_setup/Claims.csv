@@ -1,0 +1,6 @@
+"_id","moduleName","read","create","""update""","""delete""","createdAt","updatedAt","__v"
+"64dcc1b7cda9f541747a2a7d",Inspection,true,true,true,true,2023-08-16 14:31:51.000,2023-08-16 14:31:51.000,0
+"64e140864d7657fbaa706d6b",Claim,true,true,true,true,2023-08-20 00:21:58.000,2023-08-20 00:21:58.000,0
+"64e1409e4d7657fbaa706d6d",Role,true,true,true,true,2023-08-20 00:22:22.000,2023-08-20 00:22:22.000,0
+"64e140c94d7657fbaa706d6f",SignupAdmin,true,true,false,false,2023-08-20 00:23:05.000,2023-08-20 00:23:05.000,0
+"64e143ca566998de018d2fb5",Report,true,true,false,false,2023-08-20 00:35:54.000,2023-08-20 00:35:54.000,0

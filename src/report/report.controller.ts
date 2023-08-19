@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common'
 import { ReportService } from './report.service'
 import { CreateReportDto } from './dto/create-report.dto'
 import { UpdateReportDto } from './dto/update-report.dto'
+import { AuthGuard } from 'src/auth/auth.guard'
+import { ClaimActions } from 'src/auth/claims/constants'
 
 @Controller('reports')
 export class ReportController {
@@ -31,6 +34,7 @@ export class ReportController {
   }
 
   @Get('/inspections/:id')
+  @UseGuards(AuthGuard('Report', ClaimActions.create))
   findOneByInspection(@Param('id') id: string) {
     return this.reportService.findOneByInspection(id)
   }

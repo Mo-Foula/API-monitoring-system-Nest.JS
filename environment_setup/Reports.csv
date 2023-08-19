@@ -1,0 +1,6 @@
+"_id","status","availability","outages","downtime","uptime","responseTime","__v","statusCode"
+"64dec030cbee5ab8c4a92dfe",Available,100,0,0,0,499.625,0,
+"64dec033cbee5ab8c4a92e09",Available,100,0,0,0,499.625,0,
+"64dec081cbee5ab8c4a92e14",Available,100,0,0,70,499.625,0,
+"64e13f2e4d7657fbaa706d69",Not Available,0,8,70,0,499.625,0,200
+"64e144517c03520ae63b59e4",Not Available,0,8,70,0,499.625,0,200

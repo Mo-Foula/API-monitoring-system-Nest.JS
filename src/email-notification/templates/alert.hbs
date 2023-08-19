@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>A website you are watching went down</title>
+  <style>
+    /* Add your email styling here */
+  </style>
+</head>
+<body>
+  <h1>Service Alert</h1>
+  <p>Hello {{ userName }},</p>
+  <p>We regret to inform you that the service you are monitoring at the following URL is currently experiencing downtime:</p>
+  <p>Name: {{ inspectionName }}</p>
+  {{!-- <p>URL with path: <a href="{{ fullurl }}">{{ fullurl }}</a></p> --}}
+  <p>URL: <a href="{{ url }}">{{ url }}</a></p>
+  <p>Port: {{ port }}</p>
+  <p>Path: {{ path }}</p>
+  <p>Protocol: {{ protocol }}</p>
+  <p>Downtime: {{ downtime }} seconds</p>
+  <p>Please take appropriate actions to address this issue.</p>
+  <p>Thank you,</p>
+  <p>Your Monitoring Team</p>
+</body>
+</html>
