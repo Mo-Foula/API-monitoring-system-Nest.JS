@@ -5,7 +5,7 @@ This system allows you to monitor URLs, create reports about their availability 
 You can view the requirements the project was built for: [REQUIREMENTS](/REQUIREMENTS.md)
 ## Main Features
 
-### Authorization System
+### Role-Based Authorization System
 Any user wants to use the system must register an account first.
 Authorization is based on JWT Bearer tokens, upon login the user gets his token which is available for certain time (controlled by environment variable).
 
